@@ -23,7 +23,7 @@ Add this to `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/ravi-hq/agent-doc-sync
-    rev: v0.1.0
+    rev: v0.1.1
     hooks:
       - id: sync-agent-docs
 ```
@@ -45,7 +45,7 @@ pre-commit run sync-agent-docs --all-files
 Create a version tag and push it:
 
 ```bash
-git tag v0.1.0
+git tag v0.1.1
 git push origin main --tags
 ```
 

@@ -96,16 +96,12 @@ def ensure_sync(root: Path, grouped_changes: dict[str, dict[str, str]]) -> list[
     errors: list[str] = []
 
     for directory, changes in sorted(grouped_changes.items()):
-        unsupported = {
-            name: status for name, status in changes.items() if status.startswith(("D", "R"))
-        }
+        unsupported = {name: status for name, status in changes.items() if status.startswith("D")}
         if unsupported:
             rendered = ", ".join(
                 f"{name} ({status})" for name, status in sorted(unsupported.items())
             )
-            errors.append(
-                f"{directory or '.'}: cannot auto-sync deleted or renamed agent docs: {rendered}"
-            )
+            errors.append(f"{directory or '.'}: cannot auto-sync deleted agent docs: {rendered}")
             continue
 
         staged_names = sorted(changes)

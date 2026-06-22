@@ -1,6 +1,6 @@
 [project]
 name = "agent-doc-sync"
-version = "0.1.0"
+version = "0.1.1"
 description = "pre-commit hook to keep sibling AGENTS.md and CLAUDE.md files in sync"
 readme = "README.md"
 requires-python = ">=3.10"

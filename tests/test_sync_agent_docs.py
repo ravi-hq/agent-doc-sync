@@ -89,6 +89,38 @@ def test_rejects_both_docs_when_staged_content_differs(tmp_path: Path) -> None:
     assert "staged AGENTS.md and CLAUDE.md differ" in result.stderr
 
 
+def test_allows_renamed_pair_when_destination_content_matches(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    commit_initial_pair(tmp_path, "src/marasab")
+
+    (tmp_path / "src" / "jino").mkdir()
+    git(tmp_path, "mv", "src/marasab/AGENTS.md", "src/jino/AGENTS.md")
+    git(tmp_path, "mv", "src/marasab/CLAUDE.md", "src/jino/CLAUDE.md")
+
+    result = run_sync(tmp_path)
+
+    assert result.returncode == 0
+    assert result.stdout == ""
+    assert staged_text(tmp_path, "src/jino/AGENTS.md") == "original\n"
+    assert staged_text(tmp_path, "src/jino/CLAUDE.md") == "original\n"
+
+
+def test_rejects_renamed_pair_when_destination_content_differs(tmp_path: Path) -> None:
+    init_repo(tmp_path)
+    commit_initial_pair(tmp_path, "src/marasab")
+
+    (tmp_path / "src" / "jino").mkdir()
+    git(tmp_path, "mv", "src/marasab/AGENTS.md", "src/jino/AGENTS.md")
+    git(tmp_path, "mv", "src/marasab/CLAUDE.md", "src/jino/CLAUDE.md")
+    (tmp_path / "src" / "jino" / "CLAUDE.md").write_text("renamed change\n", encoding="utf-8")
+    git(tmp_path, "add", "src/jino/CLAUDE.md")
+
+    result = run_sync(tmp_path, check=False)
+
+    assert result.returncode == 1
+    assert "src/jino: staged AGENTS.md and CLAUDE.md differ" in result.stderr
+
+
 def test_rejects_overwriting_unstaged_sibling_changes(tmp_path: Path) -> None:
     init_repo(tmp_path)
     commit_initial_pair(tmp_path)
