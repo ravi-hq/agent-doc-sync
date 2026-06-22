@@ -1,0 +1,7 @@
+- id: sync-agent-docs
+  name: Sync sibling AGENTS.md and CLAUDE.md files
+  description: Keep sibling AGENTS.md and CLAUDE.md files identical in staged commits.
+  entry: scripts/sync_agent_docs.py
+  language: script
+  pass_filenames: false
+  files: (^|/)(AGENTS|CLAUDE)\.md$
